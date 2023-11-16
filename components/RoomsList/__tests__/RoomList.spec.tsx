@@ -1,5 +1,5 @@
 import { render } from "@testing-library/react";
-import { RoomsList } from "../RoomsList";
+import RoomsList from "../RoomsList";
 
 describe("<RoomsList/>", () => {
   it("should render component", () => {

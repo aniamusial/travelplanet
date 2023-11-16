@@ -44,10 +44,10 @@ export const RoomListItem = forwardRef<HTMLInputElement, RoomListItemProps>(
           <p className="text-center font-bold">{room.name}</p>
           <p>
             {displayAvailability ? (
-              isDiscountAvailable() ? (
+              isDiscountAvailable() && roomAvailability.price ? (
                 <PriceFormatter
                   oldPrice={room.price.value}
-                  price={roomAvailability?.price?.value || room.price.value}
+                  price={roomAvailability.price.value}
                   currencyCode={room.price.currencyCode}
                 />
               ) : (
