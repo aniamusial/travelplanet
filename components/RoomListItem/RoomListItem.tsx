@@ -2,6 +2,7 @@
 import { useRoomsAvailability } from "@/hooks";
 import { type RoomListItemProps } from "./types";
 import { forwardRef, useEffect } from "react";
+import { PriceFormatter } from "@/components/PriceFormatter";
 
 export const RoomListItem = forwardRef<HTMLInputElement, RoomListItemProps>(
   (
@@ -44,24 +45,22 @@ export const RoomListItem = forwardRef<HTMLInputElement, RoomListItemProps>(
           <p>
             {displayAvailability ? (
               isDiscountAvailable() ? (
-                <>
-                  <span className="line-through">
-                    {room.price?.value} {room.price.currencyCode}
-                  </span>
-                  <span className="text-green-500">
-                    {roomAvailability.price?.value}{" "}
-                    {roomAvailability.price?.currencyCode}
-                  </span>
-                </>
+                <PriceFormatter
+                  oldPrice={room.price.value}
+                  price={roomAvailability?.price?.value || room.price.value}
+                  currencyCode={room.price.currencyCode}
+                />
               ) : (
-                <span>
-                  {room.price?.value} {room.price.currencyCode}
-                </span>
+                <PriceFormatter
+                  price={room.price.value}
+                  currencyCode={room.price.currencyCode}
+                />
               )
             ) : (
-              <span>
-                {room.price?.value} {room.price.currencyCode}
-              </span>
+              <PriceFormatter
+                price={room.price.value}
+                currencyCode={room.price.currencyCode}
+              />
             )}
           </p>
           {displayAvailability && (

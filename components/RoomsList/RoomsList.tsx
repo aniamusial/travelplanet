@@ -6,7 +6,7 @@ import { RoomListItem } from "../RoomListItem";
 
 const RoomsList = () => {
   const rooms = useRooms();
-  const [selectedRoom, setSelectedRoom] = useState<string>();
+  const [selectedRoom, setSelectedRoom] = useState<string>("");
   const [availabilityStatus, setAvailabilityStatus] = useState<string>("");
   const [isAvailabilityChecked, setIsAvailbilityChecked] =
     useState<boolean>(false);
@@ -61,6 +61,7 @@ const RoomsList = () => {
         >
           Check for availability
         </button>
+        {/* NOTE: This button is type submit, as it should send a form. Therefore after click, the event will be seen very briefly in console */}
         <button
           type="submit"
           disabled={isAvailabilityChecked && availabilityStatus !== "available"}
