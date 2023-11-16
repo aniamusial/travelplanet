@@ -1,5 +1,5 @@
 "use client";
-import { ChangeEvent, useMemo, useState, useCallback } from "react";
+import { ChangeEvent, SyntheticEvent, useMemo, useState } from "react";
 import { type Room } from "../types";
 import { useRooms } from "../../hooks";
 import { RoomListItem } from "../RoomListItem";
@@ -10,7 +10,8 @@ const RoomsList = () => {
   const [availabilityStatus, setAvailabilityStatus] = useState<string>("");
   const [isAvailabilityChecked, setIsAvailbilityChecked] =
     useState<boolean>(false);
-  const sortRooms = (rooms: Room[]) => {
+
+  const sortRooms = (rooms: Room[]): Room[] => {
     return rooms.sort((a, b) => {
       return a.price?.value - b.price?.value;
     });
@@ -19,6 +20,10 @@ const RoomsList = () => {
   const handleChangeRoom = (event: ChangeEvent<HTMLInputElement>) => {
     setIsAvailbilityChecked(false);
     setSelectedRoom(event.target.value);
+  };
+
+  const onSubmit = (event: SyntheticEvent<HTMLButtonElement>) => {
+    console.log("Book button clicked with", event);
   };
 
   useMemo(() => {
@@ -60,6 +65,7 @@ const RoomsList = () => {
           type="submit"
           disabled={isAvailabilityChecked && availabilityStatus !== "available"}
           className="bg-orange-500 hover:bg-orange-700 active:bg-orange-700 text-white font-medium p-4 rounded-md disabled:bg-gray-300 disabled:cursor-not-allowed disabled:text-gray-500"
+          onClick={onSubmit}
         >
           Book
         </button>

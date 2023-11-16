@@ -17,7 +17,6 @@ export const RoomListItem = forwardRef<HTMLInputElement, RoomListItemProps>(
   ) => {
     const roomAvailability = useRoomsAvailability({ id: room.id });
     const isDiscountAvailable = () => {
-      console.log(roomAvailability);
       return (
         typeof roomAvailability?.price &&
         roomAvailability?.price?.value !== room.price.value
