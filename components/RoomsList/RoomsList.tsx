@@ -34,8 +34,8 @@ const RoomsList = () => {
     setSelectedRoom(event.target.value);
   };
 
-  const handleAvailabilityChange = (status?: string) => {
-    status && setAvailabilityStatus(status);
+  const handleAvailabilityChange = (name: string, status: string) => {
+    name === selectedRoom && setAvailabilityStatus(status);
   };
 
   const onSubmit = (event: SyntheticEvent<HTMLButtonElement>) => {
@@ -54,7 +54,7 @@ const RoomsList = () => {
                 room={room}
                 displayAvailability={isAvailabilityChecked}
                 onAvailabilityChange={(status: string) =>
-                  handleAvailabilityChange(status)
+                  handleAvailabilityChange(room.name, status)
                 }
                 onChange={(event: ChangeEvent<HTMLInputElement>) =>
                   handleChangeRoom(event)
@@ -73,8 +73,10 @@ const RoomsList = () => {
           Check for availability
         </button>
         <button
-          type="submit"
-          disabled={!isAvailabilityChecked || selectedRoom !== "available"}
+          type="button"
+          disabled={
+            !isAvailabilityChecked || availabilityStatus !== "available"
+          }
           className="bg-orange-500 hover:bg-orange-700 active:bg-orange-700 text-white font-medium p-4 rounded-md disabled:bg-gray-300 disabled:cursor-not-allowed disabled:text-gray-500"
           onClick={onSubmit}
         >
