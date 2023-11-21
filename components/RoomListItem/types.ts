@@ -1,5 +1,5 @@
 import { ChangeEvent } from "react";
-import { type Room } from "../types";
+import { RoomAvailability, type Room } from "../types";
 
 export interface RoomListItemProps {
   room: Room;

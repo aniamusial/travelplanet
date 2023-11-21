@@ -16,18 +16,19 @@ export const RoomListItem = forwardRef<HTMLInputElement, RoomListItemProps>(
     },
     ref
   ) => {
-    const roomAvailability = useRoomsAvailability({ id: room.id });
+    const { data: roomAvailability } = useRoomsAvailability({ id: room.id });
     const isDiscountAvailable = () => {
       return (
-        typeof roomAvailability?.price &&
+        roomAvailability?.price &&
         roomAvailability?.price?.value !== room.price.value
       );
     };
 
     useEffect(() => {
-      displayAvailability &&
+      if (displayAvailability && roomAvailability) {
         onAvailabilityChange(roomAvailability.availabilityStatus);
-    }, [roomAvailability, displayAvailability, onAvailabilityChange]);
+      }
+    }, [displayAvailability, roomAvailability, onAvailabilityChange]);
 
     return (
       <label className="relative">
@@ -44,10 +45,10 @@ export const RoomListItem = forwardRef<HTMLInputElement, RoomListItemProps>(
           <p className="text-center font-bold">{room.name}</p>
           <p>
             {displayAvailability ? (
-              isDiscountAvailable() && roomAvailability.price ? (
+              isDiscountAvailable() && roomAvailability?.price ? (
                 <PriceFormatter
                   oldPrice={room.price.value}
-                  price={roomAvailability.price.value}
+                  price={roomAvailability?.price.value}
                   currencyCode={room.price.currencyCode}
                 />
               ) : (
@@ -65,7 +66,7 @@ export const RoomListItem = forwardRef<HTMLInputElement, RoomListItemProps>(
           </p>
           {displayAvailability && (
             <p className="uppercase font-medium text-sm text-purple-500 py-2">
-              {roomAvailability.availabilityStatus}
+              {roomAvailability?.availabilityStatus}
             </p>
           )}
         </div>

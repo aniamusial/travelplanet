@@ -4,6 +4,10 @@ export type Room = {
   price: Price;
 };
 
+export interface RoomAvailability extends Room {
+  availabilityStatus: string;
+}
+
 export type Price = {
   value: number;
   currencyCode: string;

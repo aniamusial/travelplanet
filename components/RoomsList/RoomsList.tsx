@@ -1,11 +1,17 @@
 "use client";
-import { ChangeEvent, SyntheticEvent, useMemo, useState } from "react";
-import { type Room } from "../types";
+import {
+  ChangeEvent,
+  SyntheticEvent,
+  useMemo,
+  useState,
+  useEffect,
+} from "react";
+import { RoomAvailability, type Room } from "../types";
 import { useRooms } from "../../hooks";
 import { RoomListItem } from "../RoomListItem";
 
 const RoomsList = () => {
-  const rooms = useRooms();
+  const { data: rooms } = useRooms();
   const [selectedRoom, setSelectedRoom] = useState<string>("");
   const [availabilityStatus, setAvailabilityStatus] = useState<string>("");
   const [isAvailabilityChecked, setIsAvailbilityChecked] =
@@ -17,39 +23,44 @@ const RoomsList = () => {
     });
   };
 
+  useMemo(() => {
+    if (rooms) {
+      sortRooms(rooms);
+    }
+  }, [rooms]);
+
   const handleChangeRoom = (event: ChangeEvent<HTMLInputElement>) => {
     setIsAvailbilityChecked(false);
     setSelectedRoom(event.target.value);
+  };
+
+  const handleAvailabilityChange = (status?: string) => {
+    status && setAvailabilityStatus(status);
   };
 
   const onSubmit = (event: SyntheticEvent<HTMLButtonElement>) => {
     console.log("Book button clicked with", event);
   };
 
-  useMemo(() => {
-    sortRooms(rooms);
-  }, [rooms]);
-
   return (
     <form>
       <fieldset>
         <div className="grid grid-cols-4 gap-4">
-          {rooms.map((room) => (
-            <RoomListItem
-              key={room.id}
-              value={room.name}
-              room={room}
-              displayAvailability={
-                isAvailabilityChecked && room.name === selectedRoom
-              }
-              onAvailabilityChange={(status: string) =>
-                setAvailabilityStatus(status)
-              }
-              onChange={(event: ChangeEvent<HTMLInputElement>) =>
-                handleChangeRoom(event)
-              }
-            />
-          ))}
+          {rooms &&
+            rooms.map((room) => (
+              <RoomListItem
+                key={room.id}
+                value={room.name}
+                room={room}
+                displayAvailability={isAvailabilityChecked}
+                onAvailabilityChange={(status: string) =>
+                  handleAvailabilityChange(status)
+                }
+                onChange={(event: ChangeEvent<HTMLInputElement>) =>
+                  handleChangeRoom(event)
+                }
+              />
+            ))}
         </div>
       </fieldset>
       <hr className="my-6" />
@@ -61,10 +72,9 @@ const RoomsList = () => {
         >
           Check for availability
         </button>
-        {/* NOTE: This button is type submit, as it should send a form. Therefore after click, the event will be seen very briefly in console */}
         <button
           type="submit"
-          disabled={isAvailabilityChecked && availabilityStatus !== "available"}
+          disabled={!isAvailabilityChecked || selectedRoom !== "available"}
           className="bg-orange-500 hover:bg-orange-700 active:bg-orange-700 text-white font-medium p-4 rounded-md disabled:bg-gray-300 disabled:cursor-not-allowed disabled:text-gray-500"
           onClick={onSubmit}
         >
